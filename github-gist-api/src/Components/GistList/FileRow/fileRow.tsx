@@ -1,4 +1,5 @@
 import { IFileFork } from '../../../Model/IFileFork';
+import { FileAvatar } from '../../FileAvatar/fileAvatar';
 import { UserList } from '../../UserList/userList';
 import { IFileRowProps } from './fileRow.types';
 
@@ -7,7 +8,9 @@ export const FileRow = (props: IFileRowProps): JSX.Element => {
 
     return (
         <>
-            <td>{file.Type}</td>
+            <td>
+                <FileAvatar name={file.Name} />
+            </td>
             <td>
                 <div onClick={props.toggleFileContent}>{file.Name}</div>
             </td>
