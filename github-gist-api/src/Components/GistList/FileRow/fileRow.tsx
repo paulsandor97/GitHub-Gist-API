@@ -1,3 +1,5 @@
+import { IFileFork } from '../../../Model/IFileFork';
+import { UserList } from '../../UserList/userList';
 import { IFileRowProps } from './fileRow.types';
 
 export const FileRow = (props: IFileRowProps): JSX.Element => {
@@ -10,6 +12,9 @@ export const FileRow = (props: IFileRowProps): JSX.Element => {
                 <div onClick={props.toggleFileContent}>{file.Name}</div>
             </td>
             <td>{file.Forks.length}</td>
+            <td>
+                <UserList names={file.Forks.map((fork: IFileFork) => fork.Author.Name)} />
+            </td>
         </>
     );
 };

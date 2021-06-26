@@ -9,7 +9,7 @@ import { GistRow } from './GistRow/gistRow';
 
 export const GistList = (props: IGistListProps): JSX.Element => {
     const [filesContent, setFilesContent] = React.useState<IDictionary<IDictionary<IFileContentState>>>({});
-    const columns: React.MutableRefObject<string[]> = React.useRef<string[]>(['Type', 'File', 'Forks']);
+    const columns: React.MutableRefObject<string[]> = React.useRef<string[]>(['Type', 'File', 'Forks', 'Fork last users']);
 
     const onFileContentToggle = async (file: IGistFile, gistID: string): Promise<void> => {
         if (!filesContent[gistID]) {
@@ -19,8 +19,11 @@ export const GistList = (props: IGistListProps): JSX.Element => {
         const isFileContentDownloaded: boolean = filesContent[gistID][file.Name] ? true : false;
         if (isFileContentDownloaded) {
             setFilesContent((filesContent) => {
-                filesContent[gistID][file.Name].IsDisplayed = !filesContent[file.Name].IsDisplayed;
-                return filesContent;
+                filesContent[gistID][file.Name] = {
+                    ...filesContent[gistID][file.Name],
+                    IsDisplayed: !filesContent[gistID][file.Name].IsDisplayed,
+                };
+                return { ...filesContent };
             });
 
             return;
