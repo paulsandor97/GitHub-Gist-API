@@ -27,6 +27,15 @@ class GistService {
 
         return Promise.all(response.data.map((gistData) => this._gistDataMapper.mapGistData(gistData, this.getGistForks)));
     }
+
+    public async getFileContent(fileName: string, gistID: string): Promise<string> {
+        const response = await this._octokit.request(`GET /gists/${gistID}`, {
+            org: 'octokit',
+            type: 'private',
+        });
+
+        return await response.data.files[fileName].content;
+    }
 }
 
 const GistServiceInstance: GistService = new GistService();
