@@ -2,7 +2,7 @@ import React from 'react';
 import { ISearchBarProps } from './searchBar.types';
 
 export const SearchBar = (props: ISearchBarProps): JSX.Element => {
-    const [text, setText] = React.useState<string>('paulsandor97');
+    const [text, setText] = React.useState<string>('');
 
     const onSearchClick = (): void => {
         if (!text) {
