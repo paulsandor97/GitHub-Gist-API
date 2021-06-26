@@ -1,30 +1,21 @@
 import { Octokit } from '@octokit/core';
 import { IGistData } from '../../Model/IGistData';
-import { IGistFile } from '../../Model/IGistFile';
+import { GistDataMapper } from '../Mappers/gistDataMapper';
 
-class GistCallHelper {
+class GistService {
     private _octokit: Octokit;
+    private _gistDataMapper: GistDataMapper;
 
     constructor() {
         this._octokit = new Octokit();
+        this._gistDataMapper = new GistDataMapper();
     }
 
-    private mapGistFile = (file): IGistFile => {
-        return {
-            Name: file.fileName,
-            Language: file.language,
-            Size: file.size,
-            Type: file.type,
-            URL: file.raw_url,
-        };
-    };
-
-    private mapGistData = (data): IGistData => {
-        return {
-            IsTruncated: data.truncated,
-            Files: Object.values(data.files).map(this.mapGistFile),
-        };
-    };
+    private getGistForks = async (gistID: string) =>
+        this._octokit.request(`GET /gists/${gistID}/forks`, {
+            org: 'octokit',
+            type: 'private',
+        });
 
     public async getUserGistList(user: string): Promise<IGistData[]> {
         const response = await this._octokit.request(`GET /users/${user}/gists`, {
@@ -32,9 +23,11 @@ class GistCallHelper {
             type: 'private',
         });
 
-        return response.data.map(this.mapGistData);
+        console.log(response);
+
+        return Promise.all(response.data.map((gistData) => this._gistDataMapper.mapGistData(gistData, this.getGistForks)));
     }
 }
 
-const GistCallHelperInstance: GistCallHelper = new GistCallHelper();
-export { GistCallHelperInstance };
+const GistServiceInstance: GistService = new GistService();
+export { GistServiceInstance };

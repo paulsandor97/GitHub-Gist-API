@@ -1,24 +1,22 @@
 import React from 'react';
 import { IGistData } from '../../Model/IGistData';
-import { GistCallHelperInstance } from '../../Service/Gist/gistCall';
+import { GistServiceInstance } from '../../Service/Gist/gistCall';
+import { GistList } from '../GistList/gistList';
 import { SearchBar } from '../SearchBar/searchBar';
 
 export const GistDashboard = (): JSX.Element => {
     const [gistData, setGistData] = React.useState<IGistData[]>();
 
     const onSearcUserGistData = (user: string): void => {
-        GistCallHelperInstance.getUserGistList(user).then((gistData: IGistData[]) => {
+        GistServiceInstance.getUserGistList(user).then((gistData: IGistData[]) => {
             setGistData(gistData);
         });
     };
 
-    React.useEffect(() => {
-        console.log(gistData);
-    }, [gistData]);
-
     return (
         <div>
             <SearchBar onSearch={onSearcUserGistData} />
+            {gistData && gistData.length > 0 && <GistList gistData={gistData} />}
         </div>
     );
 };
