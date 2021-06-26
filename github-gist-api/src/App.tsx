@@ -1,7 +1,7 @@
-import React from 'react';
+import { GistDashboard } from './Components/GistDashboard/gistDashboard';
 
 function App() {
-  return (<></>  );
+    return <GistDashboard />;
 }
 
 export default App;
